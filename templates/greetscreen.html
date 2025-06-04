@@ -1,0 +1,39 @@
+{% extends 'base.html'%}
+
+{% block head %}
+<link rel="stylesheet" href ="{{ url_for('static',filename='css/style.css') }}">
+{% endblock %}
+
+
+{% block body %}
+
+<nav class = "top-nav-bar">
+    <div class = "top-nav-bar-contents">
+        <a class = "website-name" href="{{url_for('reroute_to_signup')}}">
+            <span class = "site-logo"></span>
+            <span class = "site-title">Pathologix</span>
+        </a>    
+    </div>
+<button class = "menu-mobile">
+    <div class = "hambur">☰</div>
+    <div class = "hidden">Open Menu</div>
+</button>
+<div class = "menu-wrapper">
+    <ul class = "menu-list" data-level = "1">
+        <li class = "menu-item">
+            <a class = "menu-link" href ="#">Home</a>
+        </li>
+        <li class = "menu-item">
+            <a class = "menu-link" href ="#">About</a>
+        </li>
+        <li>
+            <a class = "menu-link" href = "#">Contact</a>
+        </li>
+    </ul>
+</div>
+
+
+</nav>    
+
+
+{% endblock %}

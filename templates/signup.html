@@ -1,0 +1,25 @@
+{% extends 'base.html'%}
+
+{% block head %}
+<link rel="stylesheet" href ="{{ url_for('static',filename='css/style.css') }}">
+<meta name="view-transition" content="same-origin">
+{% endblock %}
+
+
+{% block body %}
+
+
+<h1>Enter your information below to sign up!</h1>
+
+<form action = "/submit" method="POST">
+    <label for ="uname"> Username: </label>
+    <input type="text" id="uname" name = "uname" required><br><br>
+    <label for="pword">Password: </label>
+    <input type ="text" id="pword" name="pword" required><br><br>
+    <input type="submit" value="Submit">
+</form>    
+
+
+
+
+{% endblock %}
