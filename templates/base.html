@@ -8,7 +8,15 @@
     <link rel="stylesheet" href ="{{ url_for('static',filename='css/style.css') }}">
     {%  endblock %}
 </head>
-<body>
+<nav class="navbar">
+    <ul>
+        <li><a href="{{ url_for('about') }}">About</a></li>
+        <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+        <li><a href="{{ url_for('curate_page') }}">Curate</a></li>
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        <li><a href="{{ url_for('reroute_to_signup') }}">Signup</a></li>
+    </ul>
+</nav>
 {%  block body %}
 <p>Wow hello there</p>
 {%  endblock %}

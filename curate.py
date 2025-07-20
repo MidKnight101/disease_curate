@@ -2,6 +2,10 @@ from flask import Flask, render_template, url_for, request, redirect, request, f
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 import re
+import psycopg2
+from sqlalchemy import DateTime, ForeignKey
+from sqlalchemy.orm import mapped_column
+from datetime import datetime
 
 
 curate = Flask(__name__)
@@ -17,21 +21,61 @@ class User(db.Model): #user object that takes in empty db and creates a table wi
     id = db.Column(db.Integer, primary_key = True) #unique ID for each user
     
     uname = db.Column(db.String(15), unique=True, nullable=False) #string username
-    pword = db.Column(db.String(30),unique=True, nullable=False) #string password
+    pword = db.Column(db.String(30), nullable=False) #string password
     
-    
+    favorites = db.relationship('user_faves', backref = 'user', cascade = "all,delete", lazy = True)
+
     def __init__ (self, uname, pword): #takes passed in values and creates an instance of user object with them
         self.uname = uname
         self.pword = pword
+
+class user_faves(db.Model):
+    __tablename__ = "favs"
+    id = db.Column(db.Integer, primary_key = True)
+    userId = db.Column(db.Integer, db.ForeignKey(User.id))
+
+    title = db.Column(db.String(100), nullable = False)
+    media_url = db.Column(db.String(100), nullable = False)
+    type_of_media = db.Column(db.String(100),  nullable = False)
+    time_added_to_db = db.Column(db.DateTime,default = datetime.utcnow, nullable = False)
+
+    def __init__(self, userId, title, type_of_media):
+        self.userId = userId
+        self.title = title
+        self.type_of_media = type_of_media
+    
+
         
         
 @curate.route('/')
 def index():
     return render_template('greetscreen.html')
 
-@curate.route('/test.html')
-def main():
-    return render_template('test.html')
+@curate.route('/about')
+def about():
+    return render_template('about.html')
+
+@curate.route('/contact')
+def contact():
+    return render_template('contact.html')
+
+
+@curate.route('/curate')
+def curate_page():
+    return render_template('mainpage.html')
+
+@curate.route('/login', methods = ['GET', 'POST'])
+def login():
+    if request.method == "GET":
+        username = request.form['uname']
+        password = request.form['pword']
+
+        user = User.query.filter_by(uname = username, pword = password).first()
+        if user:
+            return 'Signed up!'
+        
+
+    return render_template('login.html')
 
 @curate.route('/signup', methods = ['GET', 'POST'])
 def reroute_to_signup():
@@ -41,7 +85,7 @@ def reroute_to_signup():
         
         user = User.query.filter_by(uname = username, pword = password).first()
         if user:
-            return 'Logged in successfully!'
+            return 'Signed up successfully!'
         else:
             return 'Invalid credentials.'
     return render_template('signup.html')
